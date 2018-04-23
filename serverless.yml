@@ -28,4 +28,4 @@ functions:
       CURRENCY_CODE: ${self:custom.currency_code}
       CURRENCY: ${self:custom.currency}
     events:
-      - alexaSkill: ${self:custom.alexa_skill_id}
+      - alexaSkill
