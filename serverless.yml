@@ -1,0 +1,31 @@
+service: my-bitcoin-balance
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: ${self:custom.region}
+  stage: "production"
+
+custom:
+  region: ${self:custom.${self:provider.stage}.region}
+  blink_trade_key: ${opt:blink_trade_key}
+  blink_trade_secret: ${opt:blink_trade_secret}
+  currency_code: ${opt:currency_code, "BRL"}
+  currency: ${opt:currency, "in brazilian reais"}
+  alexa_skill_id: ${opt:alexa_skill_id}
+  production:
+    region: "us-east-1"
+    node_env: "production"
+
+functions:
+  mybitcoinbalance:
+    handler: index.handler
+    description: My Bitcoin balance
+    tags:
+      env: ${self:custom.${self:provider.stage}.node_env}
+    environment:
+      BLINK_TRADE_KEY: ${self:custom.blink_trade_key}
+      BLINK_TRADE_SECRET: ${self:custom.blink_trade_secret}
+      CURRENCY_CODE: ${self:custom.currency_code}
+      CURRENCY: ${self:custom.currency}
+    events:
+      - alexaSkill: ${self:custom.alexa_skill_id}
